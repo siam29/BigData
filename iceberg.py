@@ -295,13 +295,11 @@ print("Elapsed time : ",elapsed_time)
 
 start_time = timeit.default_timer()
 
-# Define a UDF that returns country code based on country name
 def get_country_code(country_name):
     if country_name is None:
         return "Unknown"
     return country_code_mapping.get(country_name, "Unknown")
 
-# Register the UDF
 country_udf = F.udf(get_country_code, StringType())
 
 end_time = timeit.default_timer()
@@ -335,7 +333,7 @@ transformed_df = df.select(
         F.when(F.col("chainAndBrand.chainName").isNull(), F.concat(F.lit('"chain_name": '), F.lit("' '")))
          .otherwise(F.concat(F.lit('"chain_name": '), F.col("chainAndBrand.chainName").cast(StringType()))).alias("chain_name")
     ).alias("chain_and_brand"),
-    F.col("country")  # Include the `country` column explicitly here
+    F.col("country")  
 )
 
 end_time = timeit.default_timer()
